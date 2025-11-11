@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackerPro | Login</title>
+    <style>
+        /* === RESET & BASE STYLES === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc8 50%, #f8bbd9 100%);
+            position: relative;
+        }
+
+        /* === BACKGROUND PATTERN === */
+        .bg {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            z-index: -1;
+            background-image: url('CurveWAVES.svg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+        }
+
+        /* === HEADER SECTION === */
+        header {
+            width: 100%;
+            border-bottom: 4px solid #ffffff;
+            position: sticky;
+            top: 0;
+            padding: 1px;
+            z-index: 100;
+        }
+
+        .header-banner {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            background: #f8f9fa;
+        }
+
+        /* === LOGIN CONTAINER === */
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* === LOGIN HEADER === */
+        .login-header {
+            text-align: center;
+            padding: 30px 30px 20px 30px;
+        }
+
+        /* === LOGO STYLING === */
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-image {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo span {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        /* === TITLE STYLING === */
+        .title {
+            font-size: 28px;
+            font-weight: bolder;
+            color: #333;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        /* === FORM CONTAINER === */
+        .form-container {
+            padding: 0 30px 30px 30px;
+        }
+
+        /* === FORM ELEMENTS === */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2568ef;
+            box-shadow: 0 0 0 3px rgba(37, 104, 239, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        /* === INPUT ERROR STATE === */
+        .form-input.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .form-input.error:focus {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* === ERROR MESSAGES === */
+        .error-message {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+            font-size: 12px;
+            color: #ef4444;
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        .error-icon {
+            width: 14px;
+            height: 14px;
+            border: 1px solid #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: #ef4444;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* === GENERAL ERROR ALERT === */
+        .alert {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .alert.show {
+            display: flex;
+        }
+
+        .alert-error {
+            background: #fee;
+            color: #c00;
+            border: 1px solid #fcc;
+        }
+
+        .alert-success {
+            background: #efe;
+            color: #0a0;
+            border: 1px solid #cfc;
+        }
+
+        /* === PASSWORD INPUT WITH ICON === */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper .form-input {
+            padding-right: 45px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .password-toggle:hover {
+            background: #f3f4f6;
+        }
+
+        .eye-icon {
+            width: 18px;
+            height: 18px;
+            fill: #9ca3af;
+            transition: fill 0.2s ease;
+        }
+
+        .password-toggle:hover .eye-icon {
+            fill: #6b7280;
+        }
+
+        /* === FORGOT PASSWORD === */
+        .forgot {
+            text-align: right;
+            margin-bottom: 25px;
+        }
+
+        .forgot-link {
+            color: #2568ef;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+            color: #0b4ed8;
+        }
+
+        /* === LOGIN BUTTON === */
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 20px;
+            background: #2568ef;
+            color: white;
+        }
+
+        .login-button:hover {
+            background: #0b4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 104, 239, 0.3);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .login-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* === FOOTER LINKS === */
+        .auth-footer {
+            text-align: center;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .auth-footer a {
+            color: #2568ef;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+            color: #0b4ed8;
+        }
+
+        /* === BOTTOM FOOTER === */
+        .bottom-footer {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+            margin-top: auto;
+        }
+
+        .copyright {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* === SHAKE ANIMATION === */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        /* === RESPONSIVE DESIGN === */
+        @media (max-width: 768px) {
+            .bg {
+                width: 70%;
+                opacity: 0.2;
+            }
+            
+            .login-container {
+                margin: 0 10px;
+                max-width: calc(100% - 20px);
+            }
+            
+            .form-container,
+            .login-header {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 20px 10px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+        }
+        
+        /* Subtle Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-container {
+            animation: fadeInUp 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <img src="banner.png" alt="Tracker PRO Banner" class="header-banner" />
+    </header>
+    
+    <!-- Background pattern -->
+    <div class="bg"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="login-container">
+            <!-- Login Header with Logo -->
+            <div class="login-header">
+                <!-- Logo -->
+                <div class="logo">
+                   <img src="LOGO.png" alt="Tracker Pro logo">
+                   <span>Tracker Pro</span>
+                </div>
+
+                <!-- Title -->
+                <h1 class="title">Log in</h1>
+                <p class="subtitle">to access Tracker</p>
+            </div>
+            
+            <!-- Form Container -->
+            <div class="form-container">
+                <!-- General Error Alert -->
+                <div class="alert alert-error" id="generalAlert">
+                    <span class="error-icon">!</span>
+                    <span id="alertText"></span>
+                </div>
+
+                <form id="login-form" autocomplete="on">
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email"
+                            class="form-input"
+                            placeholder="Enter your login e-mail"
+                            minlength="6"
+                            maxlength="100"
+                            autocomplete="email"
+                            required
+                        >
+                        <div class="error-message" id="email-error">
+                            <span class="error-icon">!</span>
+                            <span class="error-text">This field is required</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Password Field with Eye Icon -->
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <div class="password-wrapper">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                class="form-input"
+                                placeholder="Enter your Password"
+                                minlength="6"
+                                maxlength="50"
+                                autocomplete="current-password"
+                                required
+                            >
+                            <!-- Professional Eye Icon -->
+                            <button type="button" class="password-toggle" id="togglePassword" aria-label="Toggle password visibility">
+                                <svg class="eye-icon" id="eyeIcon" viewBox="0 0 24 24">
+                                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="error-message" id="password-error">
+                            <span class="error-icon">!</span>
+                            <span class="error-text">This field is required</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Forgot Password -->
+                    <div class="forgot">
+                        <a href="forget.html" class="forgot-link">Forgot Password?</a>
+                    </div>
+                    
+                    <!-- Login Button -->
+                    <button type="submit" class="login-button" id="loginBtn">Login</button>
+                    
+                    <!-- Sign up Link -->
+                    <div class="auth-footer">
+                        Haven't registered? <a href="registerPage.html">Register here</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Footer -->
+    <div class="bottom-footer">
+        <div class="copyright">
+            © 2025 Tracker PRO. All rights reserved.
+        </div>
+    </div>
+
+    <script>
+        'use strict';
+
+        // ============================================================================
+        // SECURITY & CONFIGURATION
+        // ============================================================================
+        const CONFIG = {
+            MIN_LENGTH: 6,
+            MAX_LENGTH: 100,
+            PASSWORD_MAX: 50,
+            EMAIL_PATTERN: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            API_ENDPOINT: '/api/login',
+            MAX_LOGIN_ATTEMPTS: 5,
+            LOCKOUT_TIME: 15 * 60 * 1000, // 15 minutes
+            SESSION_TIMEOUT: 60 * 60 * 1000 // 1 hour
+        };
+
+        // ============================================================================
+        // UTILITY FUNCTIONS - SECURITY
+        // ============================================================================
+        
+        // XSS Protection - Sanitize input
+        function sanitizeInput(input) {
+            if (typeof input !== 'string') return '';
+            return input
+                .replace(/[<>]/g, '') // Remove < and >
+                .replace(/javascript:/gi, '') // Remove javascript: protocol
+                .replace(/on\w+\s*=/gi, '') // Remove event handlers
+                .trim();
+        }
+
+        // SQL Injection Prevention - Validate input patterns
+        function detectSQLInjection(input) {
+            const sqlPatterns = [
+                /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION)\b)/gi,
+                /(--|\*|;|'|"|\/\*|\*\/)/g,
+                /(OR|AND)\s+\d+\s*=\s*\d+/gi
+            ];
+            return sqlPatterns.some(pattern => pattern.test(input));
+        }
+
+        // Rate Limiting - Login attempts tracking
+        class RateLimiter {
+            constructor() {
+                this.attempts = this.getAttempts();
+                this.lockoutUntil = this.getLockoutTime();
+            }
+
+            getAttempts() {
+                const stored = localStorage.getItem('loginAttempts');
+                return stored ? parseInt(stored, 10) : 0;
+            }
+
+            getLockoutTime() {
+                const stored = localStorage.getItem('lockoutUntil');
+                return stored ? parseInt(stored, 10) : 0;
+            }
+
+            isLocked() {
+                if (this.lockoutUntil > Date.now()) {
+                    const remainingTime = Math.ceil((this.lockoutUntil - Date.now()) / 60000);
+                    return { locked: true, minutes: remainingTime };
+                }
+                if (this.lockoutUntil > 0 && this.lockoutUntil <= Date.now()) {
+                    this.reset();
+                }
+                return { locked: false };
+            }
+
+            increment() {
+                this.attempts++;
+                localStorage.setItem('loginAttempts', this.attempts.toString());
+
+                if (this.attempts >= CONFIG.MAX_LOGIN_ATTEMPTS) {
+                    this.lockoutUntil = Date.now() + CONFIG.LOCKOUT_TIME;
+                    localStorage.setItem('lockoutUntil', this.lockoutUntil.toString());
+                }
+            }
+
+            reset() {
+                this.attempts = 0;
+                this.lockoutUntil = 0;
+                localStorage.removeItem('loginAttempts');
+                localStorage.removeItem('lockoutUntil');
+            }
+
+            getRemainingAttempts() {
+                return Math.max(0, CONFIG.MAX_LOGIN_ATTEMPTS - this.attempts);
+            }
+        }
+
+        const rateLimiter = new RateLimiter();
+
+        // Session Management
+        class SessionManager {
+            static set(key, value) {
+                try {
+                    sessionStorage.setItem(key, value);
+                } catch (e) {
+                    console.error('Session storage error:', e);
+                }
+            }
+
+            static get(key) {
+                try {
+                    return sessionStorage.getItem(key);
+                } catch (e) {
+                    console.error('Session storage error:', e);
+                    return null;
+                }
+            }
+
+            static clear() {
+                try {
+                    sessionStorage.clear();
+                } catch (e) {
+                    console.error('Session storage error:', e);
+                }
+            }
+
+            static setUserSession(userData, userType) {
+                this.set('userId', userData.id);
+                this.set('userName', `${userData.firstName} ${userData.lastName}`);
+                this.set('userEmail', userData.email);
+                this.set('userType', userType);
+                this.set('loginTime', Date.now().toString());
+            }
+
+            static isSessionValid() {
+                const loginTime = this.get('loginTime');
+                if (!loginTime) return false;
+                return (Date.now() - parseInt(loginTime, 10)) < CONFIG.SESSION_TIMEOUT;
+            }
+        }
+
+        // ============================================================================
+        // DOM ELEMENTS
+        // ============================================================================
+        const elements = {
+            form: document.getElementById('login-form'),
+            email: document.getElementById('email'),
+            password: document.getElementById('password'),
+            emailError: document.getElementById('email-error'),
+            passwordError: document.getElementById('password-error'),
+            toggleBtn: document.getElementById('togglePassword'),
+            eyeIcon: document.getElementById('eyeIcon'),
+            loginBtn: document.getElementById('loginBtn'),
+            generalAlert: document.getElementById('generalAlert'),
+            alertText: document.getElementById('alertText')
+        };
+
+        // ============================================================================
+        // VALIDATOR CLASS
+        // ============================================================================
+        class Validator {
+            constructor(input, errorElement, type = 'text') {
+                this.input = input;
+                this.errorElement = errorElement;
+                this.type = type;
+                this.isValid = false;
+                this.init();
+            }
+
+            init() {
+                this.input.addEventListener('blur', () => this.validate());
+                this.input.addEventListener('input', () => {
+                    if (this.input.classList.contains('error')) {
+                        this.validate();
+                    }
+                    // Clear general alert on input
+                    hideAlert();
+                });
+            }
+
+            validate() {
+                let value = this.input.value;
+                
+                // Sanitize input
+                value = sanitizeInput(value);
+                this.input.value = value;
+                
+                // Check if empty
+                if (!value) {
+                    this.showError('This field is required');
+                    return false;
+                }
+
+                // Check for SQL injection attempts
+                if (detectSQLInjection(value)) {
+                    this.showError('Invalid characters detected');
+                    return false;
+                }
+
+                // Check length
+                const maxLen = this.type === 'password' ? CONFIG.PASSWORD_MAX : CONFIG.MAX_LENGTH;
+                if (value.length < CONFIG.MIN_LENGTH) {
+                    this.showError(`Must be at least ${CONFIG.MIN_LENGTH} characters`);
+                    return false;
+                }
+
+                if (value.length > maxLen) {
+                    this.showError(`Must be less than ${maxLen} characters`);
+                    return false;
+                }
+
+                // Email specific validation
+                if (this.type === 'email') {
+                    if (!CONFIG.EMAIL_PATTERN.test(value)) {
+                        this.showError('Please enter a valid email address');
+                        return false;
+                    }
+                    // Additional email security check
+                    if (value.includes('..') || value.startsWith('.') || value.endsWith('.')) {
+                        this.showError('Invalid email format');
+                        return false;
+                    }
+                }
+
+                this.clearError();
+                this.isValid = true;
+                return true;
+            }
+
+            showError(message) {
+                this.input.classList.add('error');
+                this.errorElement.querySelector('.error-text').textContent = message;
+                this.errorElement.classList.add('show');
+                this.isValid = false;
+            }
+
+            clearError() {
+                this.input.classList.remove('error');
+                this.errorElement.classList.remove('show');
+            }
+
+            reset() {
+                this.clearError();
+                this.input.value = '';
+                this.isValid = false;
+            }
+        }
+
+        // ============================================================================
+        // INITIALIZE VALIDATORS
+        // ============================================================================
+        const emailValidator = new Validator(elements.email, elements.emailError, 'email');
+        const passwordValidator = new Validator(elements.password, elements.passwordError, 'password');
+
+        // ============================================================================
+        // ALERT FUNCTIONS
+        // ============================================================================
+        function showAlert(message, type = 'error') {
+            elements.generalAlert.className = `alert alert-${type} show`;
+            elements.alertText.textContent = message;
+        }
+
+        function hideAlert() {
+            elements.generalAlert.classList.remove('show');
+        }
+
+        // ============================================================================
+        // PASSWORD TOGGLE FUNCTIONALITY
+        // ============================================================================
+        elements.toggleBtn.addEventListener('click', function() {
+            const type = elements.password.type === 'password' ? 'text' : 'password';
+            elements.password.type = type;
+            
+            // Update icon
+            if (type === 'text') {
+                // Eye slash icon (password visible)
+                elements.eyeIcon.innerHTML = `
+                    <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/>
+                `;
+            } else {
+                // Regular eye icon (password hidden)
+                elements.eyeIcon.innerHTML = `
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                `;
+            }
+        });
+
+        // ============================================================================
+        // FORM SUBMISSION HANDLER
+        // ============================================================================
+        elements.form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideAlert();
+
+            // Check rate limiting
+            const lockStatus = rateLimiter.isLocked();
+            if (lockStatus.locked) {
+                showAlert(`Too many failed attempts. Please try again in ${lockStatus.minutes} minute(s).`, 'error');
+                return;
+            }
+            
+            // Validate both fields
+            const isEmailValid = emailValidator.validate();
+            const isPasswordValid = passwordValidator.validate();
+            
+            if (!isEmailValid || !isPasswordValid) {
+                return;
+            }
+            
+            // Disable submit button during processing
+            elements.loginBtn.disabled = true;
+            elements.loginBtn.textContent = 'Logging in...';
+            
+            // Prepare data for backend (sanitized)
+            const loginData = {
+                email: sanitizeInput(elements.email.value.trim().toLowerCase()),
+                password: elements.password.value // Don't sanitize password (may contain special chars)
+            };
+            
+            try {
+                // Make API call
+                const response = await loginUser(loginData);
+                
+                if (response.success) {
+                    // Reset rate limiter on successful login
+                    rateLimiter.reset();
+                    
+                    // Store user session securely
+                    if (response.user && response.user.id) {
+                        SessionManager.setUserSession(response.user, response.userType);
+                    }
+                    
+                    // Show success message briefly
+                    showAlert('Login successful! Redirecting...', 'success');
+                    
+                    // Redirect based on user type with proper routing
+                    setTimeout(() => {
+                        switch(response.userType) {
+                            case 'ADMIN':
+                                window.location.href = '/admin';
+                                break;
+                            case 'STUDENT':
+                                window.location.href = '/student';
+                                break;
+                            case 'HR':
+                                window.location.href = '/hr'; // FIXED: HR goes to /hr
+                                break;
+                            case 'FACULTY':
+                                window.location.href = '/faculty';
+                                break;
+                            default:
+                                window.location.href = '/'; // Fallback to home
+                        }
+                    }, 500);
+                } else {
+                    throw new Error(response.message || 'Login failed');
+                }
+            } catch (error) {
+                // Increment failed login attempts
+                rateLimiter.increment();
+                const remaining = rateLimiter.getRemainingAttempts();
+                
+                let errorMessage = 'Invalid email or password.';
+                if (remaining > 0 && remaining <= 3) {
+                    errorMessage += ` ${remaining} attempt(s) remaining.`;
+                }
+                
+                showAlert(errorMessage, 'error');
+                
+                // Clear password field for security
+                elements.password.value = '';
+                passwordValidator.clearError();
+            } finally {
+                // Re-enable button
+                elements.loginBtn.disabled = false;
+                elements.loginBtn.textContent = 'Login';
+            }
+        });
+
+        // ============================================================================
+        // API CALL TO BACKEND
+        // ============================================================================
+        async function loginUser(data) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+                
+                const response = await fetch(CONFIG.API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('Invalid credentials');
+                    } else if (response.status === 429) {
+                        throw new Error('Too many requests. Please try again later.');
+                    } else if (response.status >= 500) {
+                        throw new Error('Server error. Please try again later.');
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+                
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    throw new Error('Request timeout. Please check your connection.');
+                }
+                throw error;
+            }
+        }
+
+        // ============================================================================
+        // PAGE LOAD SECURITY CHECKS
+        // ============================================================================
+        window.addEventListener('load', function() {
+            // Check if user is already logged in
+            if (SessionManager.isSessionValid()) {
+                const userType = SessionManager.get('userType');
+                if (userType) {
+                    // Redirect to appropriate dashboard
+                    switch(userType) {
+                        case 'ADMIN':
+                            window.location.href = '/admin';
+                            break;
+                        case 'STUDENT':
+                            window.location.href = '/student';
+                            break;
+                        case 'HR':
+                            window.location.href = '/hr';
+                            break;
+                        case 'FACULTY':
+                            window.location.href = '/faculty';
+                            break;
+                    }
+                }
+            }
+
+            // Check if locked out
+            const lockStatus = rateLimiter.isLocked();
+            if (lockStatus.locked) {
+                showAlert(`Account temporarily locked. Try again in ${lockStatus.minutes} minute(s).`, 'error');
+                elements.loginBtn.disabled = true;
+                
+                // Re-enable after lockout time
+                setTimeout(() => {
+                    location.reload();
+                }, lockStatus.minutes * 60 * 1000);
+            }
+        });
+
+        // Prevent form resubmission on page refresh
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+
+        // Clear sensitive data on page unload
+        window.addEventListener('beforeunload', function() {
+            // Don't clear session storage, only form data
+            elements.password.value = '';
+        });
+    </script>
+</body>
+</html>
